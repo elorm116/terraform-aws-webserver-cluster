@@ -23,7 +23,7 @@ data "aws_subnets" "default" {
   }
 
   filter {
-    name   = "availabilityZone"
+    name   = "availability-zone"
     values = data.aws_availability_zones.available.names
   }
 }
@@ -123,15 +123,12 @@ resource "aws_launch_template" "web" {
 # LOAD BALANCER
 # -----------------------------
 resource "aws_lb" "web" {
-  name               = "${var.cluster_name}-alb"
-  load_balancer_type = "application"
-  subnets            = data.aws_subnets.default.ids
-  security_groups    = [aws_security_group.alb_sg.id]
-  internal           = false
-
-  lifecycle {
-    prevent_destroy = true
-  }
+  name                       = "${var.cluster_name}-alb"
+  load_balancer_type         = "application"
+  subnets                    = data.aws_subnets.default.ids
+  security_groups            = [aws_security_group.alb_sg.id]
+  internal                   = false
+  enable_deletion_protection = var.enable_destroy_protection
 
   tags = local.common_tags
 }
@@ -147,7 +144,7 @@ resource "aws_lb_target_group" "web" {
 
   health_check {
     path                = "/"
-    port                = var.server_port
+    port                = "traffic-port"
     healthy_threshold   = 2
     unhealthy_threshold = 2
     interval            = 15
@@ -187,7 +184,7 @@ resource "aws_lb_listener_rule" "web" {
 
   condition {
     path_pattern {
-      values = ["*"]
+      values = ["/*"]
     }
   }
 }
@@ -228,10 +225,6 @@ resource "aws_autoscaling_group" "web" {
     key                 = "Name"
     value               = "${var.cluster_name}-asg"
     propagate_at_launch = true
-  }
-
-  lifecycle {
-    prevent_destroy = true
   }
 }
 

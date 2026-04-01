@@ -14,14 +14,25 @@ variable "environment" {
   type        = string
 
   validation {
-    condition     = contains(["dev", "staging", "prod"], var.environment)
-    error_message = "Environment must be one of: dev, staging, prod."
+    condition     = contains(["dev", "test", "staging", "prod"], var.environment)
+    error_message = "Environment must be one of: dev, test, staging, prod."
   }
 }
 
 variable "cluster_name" {
   description = "Name of the webserver cluster"
   type        = string
+
+  validation {
+    condition = (
+      length(var.cluster_name) <= 28 &&
+      can(regex("^[A-Za-z0-9-]+$", var.cluster_name)) &&
+      !startswith(var.cluster_name, "-") &&
+      !endswith(var.cluster_name, "-") &&
+      length(regexall("--", var.cluster_name)) == 0
+    )
+    error_message = "cluster_name must be 1-28 characters, alphanumeric with hyphens only, no consecutive hyphens, and cannot start or end with a hyphen."
+  }
 }
 
 variable "instance_type" {
@@ -58,4 +69,10 @@ variable "custom_message" {
   description = "Message displayed on the homepage"
   type        = string
   default     = "Highly Available"
+}
+
+variable "enable_destroy_protection" {
+  description = "Set to false during testing to allow terraform destroy"
+  type        = bool
+  default     = true
 }
