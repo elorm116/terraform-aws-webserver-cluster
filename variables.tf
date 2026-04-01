@@ -1,38 +1,61 @@
+variable "project_name" {
+  description = "Project name used for tagging and resource naming"
+  type        = string
+}
+
+variable "team_name" {
+  description = "Team responsible for this infrastructure"
+  type        = string
+  default     = "devops"
+}
+
+variable "environment" {
+  description = "Deployment environment"
+  type        = string
+
+  validation {
+    condition     = contains(["dev", "staging", "prod"], var.environment)
+    error_message = "Environment must be one of: dev, staging, prod."
+  }
+}
+
 variable "cluster_name" {
-  description = "Used to name all resources in this module. Must be unique per environment to avoid clashes when dev and production run simultaneously in the same AWS account."
+  description = "Name of the webserver cluster"
   type        = string
 }
 
 variable "instance_type" {
-  description = "EC2 instance type for the web servers. Kept as a variable so dev can use t3.micro and production can use something larger without changing the module."
+  description = "EC2 instance type"
   type        = string
   default     = "t3.micro"
 }
 
 variable "server_port" {
-  description = "Port httpd listens on inside the EC2 instance. ALB forwards traffic here. Default is 8080 so port 80 stays free for the ALB listener."
+  description = "Port the web server listens on"
   type        = number
   default     = 8080
 }
 
 variable "alb_port" {
-  description = "Port the ALB listens on publicly. Always 80 for HTTP. Kept as a variable in case you want to run the ALB on a non-standard port in testing."
+  description = "Port the ALB listens on"
   type        = number
   default     = 80
 }
 
 variable "min_size" {
-  description = "Minimum number of EC2 instances the ASG will maintain. No default — caller must decide this per environment. Dev and production have very different availability requirements."
+  description = "Minimum number of instances in the ASG"
   type        = number
+  default     = 2
 }
 
 variable "max_size" {
-  description = "Maximum number of EC2 instances the ASG can scale to. No default — caller must decide this per environment based on expected load."
+  description = "Maximum number of instances in the ASG"
   type        = number
+  default     = 4
 }
 
 variable "custom_message" {
-  description = "Custom message displayed on the web server home page."
+  description = "Message displayed on the homepage"
   type        = string
   default     = "Highly Available"
 }
