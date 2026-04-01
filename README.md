@@ -29,7 +29,7 @@ Internet → ALB (HTTP) → EC2 instances (Apache `httpd`)
 
 ```hcl
 module "webserver_cluster" {
-  source = "git::https://github.com/elorm116/terraform-aws-webserver-cluster.git?ref=v0.0.3"
+  source = "git::https://github.com/elorm116/terraform-aws-webserver-cluster.git?ref=v0.0.4"
 
   project_name = "my-project"
   team_name    = "devops"
@@ -42,7 +42,7 @@ module "webserver_cluster" {
 
 ```hcl
 module "webserver_cluster" {
-  source = "git::https://github.com/elorm116/terraform-aws-webserver-cluster.git?ref=v0.0.3"
+  source = "git::https://github.com/elorm116/terraform-aws-webserver-cluster.git?ref=v0.0.4"
 
   project_name = "dark-knight"
   team_name    = "platform"
@@ -116,7 +116,7 @@ terraform -chdir=examples/consumer init -backend=false
 terraform -chdir=examples/consumer validate
 ```
 
-## Release process (tag v0.0.3)
+## Release process (tag v0.0.4)
 
 1. Ensure everything is formatted and validates:
 
@@ -129,8 +129,8 @@ make validate
 3. Create and push the tag:
 
 ```bash
-git tag -a v0.0.3 -m "Release v0.0.3"
-git push origin v0.0.3
+git tag -a v0.0.4 -m "Release v0.0.4"
+git push origin v0.0.4
 ```
 
 ## Known limitations
