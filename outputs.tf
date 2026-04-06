@@ -17,3 +17,8 @@ output "target_group_arn" {
   description = "ARN of the Target Group"
   value       = aws_lb_target_group.web.arn
 }
+
+output "instance_type_used" {
+  description = "The EC2 instance type being used by the ASG"
+  value       = var.instance_type
+}

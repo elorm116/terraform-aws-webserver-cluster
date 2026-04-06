@@ -76,3 +76,27 @@ variable "enable_destroy_protection" {
   type        = bool
   default     = true
 }
+
+variable "app_version" {
+  description = "Application version to display"
+  type        = string
+  default     = "v1.0.0"
+}
+
+variable "enable_monitoring" {
+  description = "Enable CloudWatch monitoring and alarms"
+  type        = bool
+  default     = false
+}
+
+variable "alarm_email" {
+  description = "Email for CloudWatch alarm notifications"
+  type        = string
+  default     = ""
+}
+
+variable "cpu_alarm_threshold" {
+  description = "CPU threshold percentage for alarms"
+  type        = number
+  default     = 80
+}
