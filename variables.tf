@@ -72,9 +72,9 @@ variable "custom_message" {
 }
 
 variable "enable_destroy_protection" {
-  description = "Set to false during testing to allow terraform destroy"
+  description = "If true, the ALB cannot be deleted via the API. Set to false during testing to allow terraform destroy"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "app_version" {
